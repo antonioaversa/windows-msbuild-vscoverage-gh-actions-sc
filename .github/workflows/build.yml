@@ -23,7 +23,7 @@ jobs:
         uses: darenm/Setup-VSTest@v1.2
 
       - name: Install sonar-scanner and build-wrapper
-        uses: sonarsource/sonarcloud-github-c-cpp@v3
+        uses: sonarsource/sonarcloud-github-c-cpp@antonio/SCCPPGHA-10-rebranding-forwarding
 
       - name: Run build-wrapper
         run: |
