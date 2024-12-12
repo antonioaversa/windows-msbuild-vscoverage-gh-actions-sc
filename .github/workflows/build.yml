@@ -22,8 +22,8 @@ jobs:
       - name: Setup VSTest.console.exe # Needed to run tests and generate coverage
         uses: darenm/Setup-VSTest@v1.2
 
-      - name: Install sonar-scanner and build-wrapper
-        uses: sonarsource/sonarcloud-github-c-cpp@antonio/SCCPPGHA-10-rebranding-forwarding
+      - name: Install build-wrapper
+        uses: sonarsource/sonarqube-scan-action/install-build-wrapper@antonio/SQCPPGHA-9-rebranding-and-forward
 
       - name: Run build-wrapper
         run: |
@@ -38,11 +38,12 @@ jobs:
           /EnableCodeCoverage 
           /Collect:"Code Coverage;Format=Xml" 
           /ResultsDirectory:"${{ env.COVERAGE_RESULTS }}"
-      - name: Run sonar-scanner
+      - name: Install and run sonar-scanner
+        uses: sonarsource/sonarqube-scan-action@antonio/SQCPPGHA-9-rebranding-and-forward
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }} # Put the name of your token here
-        run: >
-          sonar-scanner 
-          --define sonar.cfamily.compile-commands="${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
-          --define sonar.cfamily.vscoveragexml.reportsPath="${{ env.COVERAGE_RESULTS }}/*/*.xml"
+        with:
+          args: > 
+            --define sonar.cfamily.compile-commands="${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
+            --define sonar.cfamily.vscoveragexml.reportsPath="${{ env.COVERAGE_RESULTS }}/*/*.xml"
